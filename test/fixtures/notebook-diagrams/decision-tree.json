@@ -1,0 +1,22 @@
+{
+	"title":  "should i ship it?",
+	"nodes":
+	[
+		{ "id": "start",   "label": "ready to ship?",   "kind": "diamond" },
+		{ "id": "tests",   "label": "tests passing?",   "kind": "diamond" },
+		{ "id": "ci",      "label": "CI green?",        "kind": "diamond" },
+		{ "id": "ship",    "label": "ship it",          "kind": "ellipse", "accent": "link" },
+		{ "id": "wait",    "label": "fix + retry",      "kind": "note",    "background": "highlight" },
+		{ "id": "rollback","label": "rollback plan",    "kind": "rectangle", "accent": "accent" }
+	],
+	"edges":
+	[
+		{ "from": "start",  "to": "tests",   "label": "yes" },
+		{ "from": "tests",  "to": "ci",      "label": "yes" },
+		{ "from": "tests",  "to": "wait",    "label": "no" },
+		{ "from": "ci",     "to": "ship",    "label": "yes" },
+		{ "from": "ci",     "to": "wait",    "label": "no" },
+		{ "from": "ship",   "to": "rollback","label": "and",  "kind": "dotted" }
+	],
+	"layout": "flow"
+}

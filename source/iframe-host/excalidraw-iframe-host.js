@@ -1,0 +1,255 @@
+/**
+ * excalidraw-iframe-host.js — runs inside the iframe.  Talks postMessage to
+ * the parent PictView-Excalidraw-Iframe instance.
+ *
+ * Loaded after excalidraw-wrapper.min.js, so window.PictSectionExcalidrawVendor
+ * is already populated with { React, ReactDOM, Excalidraw, exportToSvg, ... }.
+ *
+ * This file is plain ES5-ish so it doesn't need a build step of its own — the
+ * vendor bundle next to it carries the React/Excalidraw payload.
+ */
+
+(function ()
+{
+	if (typeof window === 'undefined') return;
+
+	var STATUS_EL = document.getElementById('status');
+	var ROOT_EL   = document.getElementById('root');
+
+	function showStatus(pMessage)
+	{
+		if (!STATUS_EL) return;
+		STATUS_EL.classList.remove('hidden');
+		STATUS_EL.textContent = pMessage;
+	}
+	function hideStatus()
+	{
+		if (!STATUS_EL) return;
+		STATUS_EL.classList.add('hidden');
+	}
+
+	function postToParent(pMessage)
+	{
+		if (window.parent && window.parent !== window)
+		{
+			window.parent.postMessage(pMessage, '*');
+		}
+	}
+
+	var vendor = window.PictSectionExcalidrawVendor;
+	if (!vendor || !vendor.React || !vendor.ReactDOM || !vendor.Excalidraw)
+	{
+		showStatus('Excalidraw wrapper bundle did not load.');
+		postToParent({ type: 'pict-excalidraw:error', message: 'wrapper bundle missing' });
+		return;
+	}
+
+	var React      = vendor.React;
+	var ReactDOM   = vendor.ReactDOM;
+	var Excalidraw = vendor.Excalidraw;
+
+	var excalidrawAPI = null;
+	var reactRoot     = null;
+	var currentProps  =
+	{
+		initialData:     { elements: [], appState: {}, files: {} },
+		theme:           'light',
+		langCode:        'en',
+		viewModeEnabled: false,
+		zenModeEnabled:  false,
+		gridModeEnabled: false,
+		UIOptions:       {}
+	};
+	var changeThrottleHandle = null;
+	var lastChangeSnapshot   = null;
+
+	function applyThemeTokens(pTokens)
+	{
+		if (!pTokens) return;
+		var tmpRoot = document.documentElement;
+		var tmpKeys = Object.keys(pTokens);
+		for (var i = 0; i < tmpKeys.length; i++)
+		{
+			tmpRoot.style.setProperty(tmpKeys[i], pTokens[tmpKeys[i]]);
+		}
+	}
+
+	function buildRender()
+	{
+		var tmpProps = Object.assign({}, currentProps,
+		{
+			// Public prop is onExcalidrawAPI, not excalidrawAPI (the latter
+			// is just the mountPayload shape inside Excalidraw's own code).
+			onExcalidrawAPI: function (pApi) { excalidrawAPI = pApi; },
+			onChange: function (pElements, pAppState, pFiles)
+			{
+				lastChangeSnapshot =
+				{
+					elements: pElements,
+					appState: pAppState,
+					files:    pFiles
+				};
+				if (changeThrottleHandle) return;
+				changeThrottleHandle = setTimeout(function ()
+				{
+					changeThrottleHandle = null;
+					var tmpSnap = lastChangeSnapshot;
+					if (!tmpSnap) return;
+					postToParent({ type: 'pict-excalidraw:change', payload:
+					{
+						elements: tmpSnap.elements.slice(),
+						appState: Object.assign({}, tmpSnap.appState),
+						files:    Object.assign({}, tmpSnap.files)
+					}});
+				}, 150);
+			}
+		});
+		return React.createElement(Excalidraw, tmpProps);
+	}
+
+	function mount()
+	{
+		if (!reactRoot)
+		{
+			reactRoot = ReactDOM.createRoot(ROOT_EL);
+		}
+		reactRoot.render(buildRender());
+	}
+
+	function getSceneSnapshot()
+	{
+		if (!excalidrawAPI) return null;
+		return {
+			elements: excalidrawAPI.getSceneElements(),
+			appState: excalidrawAPI.getAppState(),
+			files:    excalidrawAPI.getFiles ? excalidrawAPI.getFiles() : {}
+		};
+	}
+
+	function exportSvgScene(pOpts)
+	{
+		if (!vendor.exportToSvg) return Promise.reject(new Error('exportToSvg unavailable'));
+		var tmpScene = getSceneSnapshot();
+		if (!tmpScene) return Promise.reject(new Error('Excalidraw not mounted'));
+		return vendor.exportToSvg(Object.assign({
+			elements: tmpScene.elements,
+			appState: tmpScene.appState,
+			files:    tmpScene.files
+		}, pOpts || {})).then(function (pSvgEl)
+		{
+			// Serialize to a string for postMessage (SVG element is not
+			// structured-cloneable).
+			return new XMLSerializer().serializeToString(pSvgEl);
+		});
+	}
+
+	function exportBlobScene(pOpts)
+	{
+		if (!vendor.exportToBlob) return Promise.reject(new Error('exportToBlob unavailable'));
+		var tmpScene = getSceneSnapshot();
+		if (!tmpScene) return Promise.reject(new Error('Excalidraw not mounted'));
+		return vendor.exportToBlob(Object.assign({
+			elements: tmpScene.elements,
+			appState: tmpScene.appState,
+			files:    tmpScene.files,
+			mimeType: 'image/png'
+		}, pOpts || {}));
+	}
+
+	window.addEventListener('message', function (pEvent)
+	{
+		if (!pEvent.data || typeof pEvent.data !== 'object') return;
+		var tmpData = pEvent.data;
+		switch (tmpData.type)
+		{
+			case 'pict-excalidraw:init':
+				if (tmpData.payload)
+				{
+					if (tmpData.payload.assetBaseURL && !window.EXCALIDRAW_ASSET_PATH)
+					{
+						window.EXCALIDRAW_ASSET_PATH = tmpData.payload.assetBaseURL;
+					}
+					currentProps = Object.assign(currentProps, tmpData.payload);
+				}
+				mount();
+				hideStatus();
+				return;
+
+			case 'pict-excalidraw:setScene':
+				if (!excalidrawAPI || !tmpData.payload) return;
+				excalidrawAPI.updateScene({
+					elements: tmpData.payload.elements || [],
+					appState: tmpData.payload.appState || {},
+					collaborators: new Map()
+				});
+				if (tmpData.payload.files && excalidrawAPI.addFiles)
+				{
+					var tmpKeys = Object.keys(tmpData.payload.files);
+					var tmpArr = [];
+					for (var i = 0; i < tmpKeys.length; i++) tmpArr.push(tmpData.payload.files[tmpKeys[i]]);
+					if (tmpArr.length) excalidrawAPI.addFiles(tmpArr);
+				}
+				return;
+
+			case 'pict-excalidraw:setTheme':
+				currentProps.theme = tmpData.payload || 'light';
+				if (excalidrawAPI)
+				{
+					excalidrawAPI.updateScene({ appState: { theme: currentProps.theme } });
+				}
+				else
+				{
+					mount();
+				}
+				return;
+
+			case 'pict-excalidraw:setReadOnly':
+				currentProps.viewModeEnabled = !!tmpData.payload;
+				if (excalidrawAPI)
+				{
+					excalidrawAPI.updateScene({ appState: { viewModeEnabled: !!tmpData.payload } });
+				}
+				return;
+
+			case 'pict-excalidraw:setThemeTokens':
+				applyThemeTokens(tmpData.payload);
+				return;
+
+			case 'pict-excalidraw:requestScene':
+				postToParent({ type: 'pict-excalidraw:sceneReply', requestId: tmpData.requestId,
+					payload: getSceneSnapshot() });
+				return;
+
+			case 'pict-excalidraw:requestSvg':
+				exportSvgScene(tmpData.exportOptions || {}).then(function (pSvgString)
+				{
+					postToParent({ type: 'pict-excalidraw:svgReply', requestId: tmpData.requestId,
+						payload: pSvgString });
+				}).catch(function (pErr)
+				{
+					postToParent({ type: 'pict-excalidraw:error', requestId: tmpData.requestId,
+						message: (pErr && pErr.message) || 'svg export failed' });
+				});
+				return;
+
+			case 'pict-excalidraw:requestBlob':
+				exportBlobScene(tmpData.exportOptions || {}).then(function (pBlob)
+				{
+					postToParent({ type: 'pict-excalidraw:blobReply', requestId: tmpData.requestId,
+						payload: pBlob });
+				}).catch(function (pErr)
+				{
+					postToParent({ type: 'pict-excalidraw:error', requestId: tmpData.requestId,
+						message: (pErr && pErr.message) || 'blob export failed' });
+				});
+				return;
+
+			default:
+				return;
+		}
+	});
+
+	// Tell the parent we're alive.  The parent will respond with an init
+	// message and we'll mount then.
+	postToParent({ type: 'pict-excalidraw:ready' });
+})();

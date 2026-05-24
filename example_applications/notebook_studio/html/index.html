@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Notebook Studio — pict-section-excalidraw</title>
+		<style id="PICT-CSS"></style>
+		<link rel="stylesheet" href="./excalidraw-wrapper.css" />
+		<style>
+			*, *::before, *::after { box-sizing: border-box; }
+			html, body { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; }
+			body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #2A2520; background: #FAF7F2; display: flex; flex-direction: column; }
+
+			/* ---------- Header ---------- */
+			.studio-header { display: flex; align-items: stretch; background: #3D3229; color: #F5EFE3; flex: 0 0 auto; }
+			.studio-header .badge { background: #C9602F; padding: 0.55rem 1rem; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; display: flex; align-items: center; }
+			.studio-header .title { padding: 0.55rem 1rem; font-size: 1.05rem; font-weight: 600; display: flex; align-items: center; }
+			.studio-header .module { margin-left: auto; padding: 0.55rem 1rem; font-size: 0.72rem; opacity: 0.7; display: flex; align-items: center; }
+
+			/* ---------- Layout: left controls + right preview ---------- */
+			.studio-body { display: grid; grid-template-columns: 440px 1fr; gap: 12px; padding: 12px; flex: 1 1 auto; min-height: 0; }
+			.studio-controls { display: flex; flex-direction: column; gap: 10px; min-height: 0; }
+			.studio-preview-wrap { background: #FFFFFF; border: 1px solid #D4C4A8; border-top: 4px solid #C9602F; border-radius: 6px; padding: 8px; min-height: 0; display: flex; flex-direction: column; }
+			.studio-preview-wrap h3 { margin: 0 0 6px 4px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: #5A4A3C; }
+			#StudioPreview { flex: 1 1 auto; min-height: 0; }
+			#StudioPreview .pict-excalidraw-wrap { height: 100%; }
+
+			/* ---------- Description card ---------- */
+			.studio-card { background: #FFFFFF; border: 1px solid #D4C4A8; border-radius: 6px; padding: 10px; }
+			.studio-card h3 { margin: 0 0 6px 0; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: #5A4A3C; }
+			.studio-card textarea { width: 100%; border: 1px solid #DDD6CA; border-radius: 4px; padding: 8px; font-family: inherit; font-size: 0.85rem; resize: vertical; background: #FBF7EE; color: #2A2520; }
+
+			/* ---------- Tabs ---------- */
+			.studio-card.studio-input-card { flex: 1 1 auto; display: flex; flex-direction: column; min-height: 0; padding: 0; overflow: hidden; }
+			.studio-tabs { display: flex; background: #F0EAD8; border-bottom: 1px solid #D4C4A8; }
+			.studio-tab { padding: 0.45rem 0.9rem; font-size: 0.78rem; font-weight: 600; cursor: pointer; border: none; background: transparent; color: #5A4A3C; border-right: 1px solid #D4C4A8; }
+			.studio-tab.active { background: #FFFFFF; color: #3D3229; border-bottom: 2px solid #C9602F; margin-bottom: -1px; }
+			.studio-tab:hover { background: #F8F4E9; }
+
+			.studio-pane { display: none; padding: 8px; flex: 1 1 auto; min-height: 0; flex-direction: column; }
+			.studio-pane.active { display: flex; }
+			.studio-pane textarea { flex: 1 1 auto; width: 100%; border: 1px solid #DDD6CA; border-radius: 4px; padding: 8px; font-family: 'SFMono-Regular', 'SF Mono', 'Menlo', 'Consolas', monospace; font-size: 0.78rem; line-height: 1.45; resize: none; background: #FBF7EE; color: #2A2520; min-height: 200px; white-space: pre; }
+			.studio-pane .pane-help { font-size: 0.72rem; color: #8A7F72; margin-bottom: 6px; line-height: 1.4; }
+			.studio-pane .pane-help code { background: #F4EEE2; padding: 1px 4px; border-radius: 3px; font-family: 'SFMono-Regular', monospace; font-size: 0.85em; }
+
+			/* ---------- Action row ---------- */
+			.studio-actions { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px; background: #FAF6EA; border-top: 1px solid #E8E1D0; }
+			.studio-actions button { padding: 0.4rem 0.9rem; border-radius: 4px; border: 1px solid #3D3229; background: #3D3229; color: #FFFFFF; cursor: pointer; font-weight: 600; font-size: 0.78rem; }
+			.studio-actions button.secondary { background: #FFFFFF; color: #3D3229; }
+			.studio-actions button.primary { background: #C9602F; border-color: #C9602F; }
+			.studio-actions button:hover { filter: brightness(0.95); }
+			.studio-actions select { padding: 0.35rem 0.6rem; border-radius: 4px; border: 1px solid #D4C4A8; font-size: 0.78rem; background: #FFFFFF; color: #3D3229; cursor: pointer; }
+			.studio-actions .spacer { margin-left: auto; }
+
+			/* ---------- Status bar ---------- */
+			.studio-status { padding: 6px 10px; font-size: 0.78rem; border-radius: 4px; background: #F4EEE2; color: #5A4A3C; border: 1px solid #E0D8C6; min-height: 28px; }
+			.studio-status.studio-status-ok   { background: #E8F4EE; color: #1F6B3F; border-color: #C5E0CE; }
+			.studio-status.studio-status-warn { background: #FBEFD1; color: #8A6510; border-color: #E8C97A; }
+			.studio-status.studio-status-err  { background: #FBE3DC; color: #8C2E1A; border-color: #E8B2A0; }
+		</style>
+		<script src="./pict.min.js" type="text/javascript"></script>
+		<script src="./react-vendor.min.js" type="text/javascript"></script>
+		<script src="./excalidraw-wrapper.min.js" type="text/javascript"></script>
+		<script src="./notebook_studio_example.min.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			Pict.safeOnDocumentReady(() => Pict.safeLoadPictApplication(NotebookStudioExample, 1));
+		</script>
+	</head>
+	<body>
+		<div class="studio-header">
+			<div class="badge">Pict Example</div>
+			<div class="title">Notebook Studio — handcraft diagrams via DSL, AI prompt, or JSON</div>
+			<div class="module">pict-section-excalidraw</div>
+		</div>
+
+		<div class="studio-body">
+			<div class="studio-controls">
+				<div class="studio-card">
+					<h3>Description (free text)</h3>
+					<textarea id="studio-description" rows="3" placeholder="Describe the diagram in plain language.  E.g.:&#10;A four-service backend: user → api → db, with a side cache."></textarea>
+				</div>
+
+				<div class="studio-card studio-input-card">
+					<div class="studio-tabs">
+						<button class="studio-tab active" data-mode="dsl"    onclick="_Pict.PictApplication.selectTab('dsl')">DSL</button>
+						<button class="studio-tab"        data-mode="json"   onclick="_Pict.PictApplication.selectTab('json')">JSON</button>
+						<button class="studio-tab"        data-mode="prompt" onclick="_Pict.PictApplication.selectTab('prompt')">AI Prompt</button>
+					</div>
+
+					<div class="studio-pane active" data-mode="dsl">
+						<div class="pane-help">
+							Line-oriented mini-language.  <code>id: label (kind) {accent}</code> declares a node.
+							<code>from -&gt; to: label (kind)</code> declares an edge.
+							<code>title:</code> sets the heading.  <code>#</code> starts a comment.
+						</div>
+						<textarea id="studio-dsl" placeholder="title: my diagram&#10;&#10;a: User (ellipse)&#10;b: API&#10;c: Database&#10;&#10;a -&gt; b: request&#10;b -&gt; c: query"></textarea>
+					</div>
+
+					<div class="studio-pane" data-mode="json">
+						<div class="pane-help">
+							Paste an LLM's JSON response here, or hand-write a diagram in
+							the fixture shape.  See the <strong>AI Prompt</strong> tab for the schema.
+						</div>
+						<textarea id="studio-json" placeholder='{ "title": "...", "nodes": [...], "edges": [...] }'></textarea>
+					</div>
+
+					<div class="studio-pane" data-mode="prompt">
+						<div class="pane-help">
+							Click <strong>Copy AI Prompt</strong> to put a fully-formed prompt
+							on your clipboard.  Paste it into Claude / GPT / whatever, then
+							drop the AI's JSON response into the <strong>JSON</strong> tab and click Render.
+						</div>
+						<textarea id="studio-prompt-preview" readonly placeholder="(click Copy AI Prompt to populate)"></textarea>
+					</div>
+
+					<div class="studio-actions">
+						<button class="primary" onclick="_Pict.PictApplication.renderDiagram()">Render</button>
+						<button onclick="_Pict.PictApplication.copyAIPrompt()">Copy AI Prompt</button>
+						<select onchange="if (this.value) { _Pict.PictApplication.loadExample(this.value); this.value=''; }">
+							<option value="">Load example…</option>
+							<option value="service-flow">service flow</option>
+							<option value="decision">should i ship it?</option>
+							<option value="mental-model">pict-section-excalidraw</option>
+						</select>
+						<span class="spacer"></span>
+						<button class="secondary" onclick="_Pict.PictApplication.exportSvg()">Export SVG</button>
+						<button class="secondary" onclick="_Pict.PictApplication.exportJson()">Export JSON</button>
+					</div>
+				</div>
+
+				<div id="studio-status" class="studio-status">Ready.  Load an example or write your own DSL.</div>
+			</div>
+
+			<div class="studio-preview-wrap">
+				<h3>Live Excalidraw Preview</h3>
+				<div id="StudioPreview"></div>
+			</div>
+		</div>
+	</body>
+</html>

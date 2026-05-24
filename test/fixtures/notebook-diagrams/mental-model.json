@@ -1,0 +1,24 @@
+{
+	"title":  "pict-section-excalidraw — mental model",
+	"nodes":
+	[
+		{ "id": "consumer", "label": "Pict App",          "kind": "ellipse" },
+		{ "id": "section",  "label": "pict-section-\nexcalidraw", "kind": "rectangle", "accent": "link" },
+		{ "id": "react",    "label": "PictView-Excalidraw-React", "kind": "rectangle" },
+		{ "id": "iframe",   "label": "PictView-Excalidraw-Iframe","kind": "rectangle" },
+		{ "id": "wrapper",  "label": "wrapper bundle",    "kind": "note",      "background": "highlight" },
+		{ "id": "excalidraw","label": "Excalidraw (React)","kind": "rectangle", "accent": "accent" },
+		{ "id": "scene",    "label": ".excalidraw.svg\n+ .excalidraw.json", "kind": "rectangle" }
+	],
+	"edges":
+	[
+		{ "from": "consumer", "to": "section",   "label": "addView" },
+		{ "from": "section",  "to": "react",     "label": "EmbedMode=react" },
+		{ "from": "section",  "to": "iframe",    "label": "EmbedMode=iframe", "kind": "dashed" },
+		{ "from": "react",    "to": "wrapper",   "label": "loads" },
+		{ "from": "iframe",   "to": "wrapper",   "label": "loads in iframe", "kind": "dashed" },
+		{ "from": "wrapper",  "to": "excalidraw","label": "mounts" },
+		{ "from": "excalidraw","to": "scene",    "label": "saves",  "kind": "solid" }
+	],
+	"layout": "flow"
+}

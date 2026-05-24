@@ -1,0 +1,28 @@
+{
+	"name": "embedded_excalidraw_example",
+	"version": "1.0.0",
+	"description": "Demo: Excalidraw embedded in a small div with sibling chrome, demonstrating OnLoad/OnSave overrides",
+	"main": "EmbeddedExcalidraw-Example-Application.js",
+	"scripts": {
+		"start": "node EmbeddedExcalidraw-Example-Application.js",
+		"build": "npx quack build && npx quack copy"
+	},
+	"author": "steven",
+	"license": "MIT",
+	"copyFilesSettings": {
+		"whenFileExists": "overwrite"
+	},
+	"copyFiles": [
+		{ "from": "./html/*",                                            "to": "./dist/" },
+		{ "from": "../../node_modules/pict/dist/*",                      "to": "./dist/" },
+		{ "from": "../../vendor/excalidraw-built/react-vendor.min.js",   "to": "./dist/" },
+		{ "from": "../../vendor/excalidraw-built/excalidraw-wrapper.min.js", "to": "./dist/" },
+		{ "from": "../../vendor/excalidraw-built/excalidraw-wrapper.css",    "to": "./dist/" },
+		{ "from": "../../vendor/excalidraw-built/assets/**/*",           "to": "./dist/excalidraw-assets/" }
+	],
+	"dependencies": {
+		"pict": "^1.0.348",
+		"pict-application": "^1.0.19",
+		"pict-view": "^1.0.66"
+	}
+}
