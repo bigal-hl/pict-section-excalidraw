@@ -62,42 +62,58 @@
 		let tmpKnownIds = {};
 		let tmpErrors   = [];
 
-		let _ATTR_PATTERN = /\(([^)]*)\)|\{([^}]*)\}/g;
+		// Whitelist of values legal as a `(kind)` attribute.  Anything else
+		// in parentheses — like `(React)` in a label — stays part of the
+		// label so we don't smuggle arbitrary text into the kind field.
+		let _KIND_WHITELIST = {
+			'rectangle': true, 'ellipse': true, 'diamond': true, 'note': true,
+			'solid':     true, 'dashed':  true, 'dotted':  true, 'curved': true
+		};
+		// `{accent}` braces always extract — they're an explicit attribute
+		// container, not a label substring.  But the trailing-parens kind
+		// extraction only fires when the parens are at the very end of
+		// the label AND the content is a whitelisted kind word.
 		function extractAttrs(pLabelText)
 		{
-			// Pull (kind) and {accent} out of the label, return the cleaned
-			// label + extracted attrs.
+			let tmpRaw = pLabelText;
 			let tmpKind   = null;
 			let tmpAccent = null;
 			let tmpBackground = null;
-			let tmpClean = pLabelText.replace(_ATTR_PATTERN, function (pMatch, pParen, pBrace)
+
+			// Pull braces out greedy — they're unambiguous.
+			tmpRaw = tmpRaw.replace(/\{([^}]*)\}/g, function (pMatch, pBraceBody)
 			{
-				let tmpVal = (pParen || pBrace || '').trim();
-				if (pParen !== undefined)
+				let tmpVal = (pBraceBody || '').trim();
+				let tmpParts = tmpVal.split(':').map(function (s) { return s.trim(); });
+				if (tmpParts.length === 1)
 				{
-					// (kind) — either a shape kind or an edge style
-					tmpKind = tmpVal.toLowerCase();
+					tmpAccent = tmpParts[0].toLowerCase();
+				}
+				else if (tmpParts[0] === 'background')
+				{
+					tmpBackground = tmpParts[1].toLowerCase();
 				}
 				else
 				{
-					// {accent} or {accent:value} or {background:value}
-					let tmpParts = tmpVal.split(':').map(function (s) { return s.trim(); });
-					if (tmpParts.length === 1)
-					{
-						tmpAccent = tmpParts[0].toLowerCase();
-					}
-					else if (tmpParts[0] === 'background')
-					{
-						tmpBackground = tmpParts[1].toLowerCase();
-					}
-					else
-					{
-						tmpAccent = tmpParts[1].toLowerCase();
-					}
+					tmpAccent = tmpParts[1].toLowerCase();
 				}
 				return '';
-			}).trim();
-			return { label: tmpClean, kind: tmpKind, accent: tmpAccent, background: tmpBackground };
+			});
+
+			// Then peel a trailing (kind) — only if it's a whitelisted word.
+			// Loop because someone might write `Excalidraw (React) (note)`.
+			let tmpTail = /\s*\(([A-Za-z][A-Za-z0-9_-]*)\)\s*$/;
+			while (true)
+			{
+				let tmpMatch = tmpRaw.match(tmpTail);
+				if (!tmpMatch) break;
+				let tmpCandidate = tmpMatch[1].toLowerCase();
+				if (!_KIND_WHITELIST[tmpCandidate]) break;
+				if (!tmpKind) tmpKind = tmpCandidate;
+				tmpRaw = tmpRaw.slice(0, tmpRaw.length - tmpMatch[0].length);
+			}
+
+			return { label: tmpRaw.trim(), kind: tmpKind, accent: tmpAccent, background: tmpBackground };
 		}
 
 		for (let i = 0; i < tmpLines.length; i++)
