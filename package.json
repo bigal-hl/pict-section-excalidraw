@@ -23,14 +23,14 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/stevenvelozo/pict-section-excalidraw.git"
+		"url": "git+https://github.com/fable-retold/pict-section-excalidraw.git"
 	},
 	"author": "steven velozo <steven@velozo.com>",
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/stevenvelozo/pict-section-excalidraw/issues"
+		"url": "https://github.com/fable-retold/pict-section-excalidraw/issues"
 	},
-	"homepage": "https://github.com/stevenvelozo/pict-section-excalidraw#readme",
+	"homepage": "https://github.com/fable-retold/pict-section-excalidraw#readme",
 	"devDependencies": {
 		"browser-env": "^3.3.0",
 		"esbuild": "^0.19.10",
