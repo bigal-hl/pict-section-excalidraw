@@ -195,7 +195,7 @@ Iframe to parent:
 
 Request/reply pairs are matched by an incrementing `requestId`; each pending request carries a 30-second safety timeout that rejects the promise if no reply arrives. The parent only accepts messages whose `event.source` is the iframe's own `contentWindow`.
 
-> **Known limitation.** `exportBlob()` in iframe mode posts a `pict-excalidraw:requestBlob` message and the host replies with `pict-excalidraw:blobReply`, but the parent's message handler currently resolves only `sceneReply` and `svgReply`. As a result, `exportBlob()` in iframe mode will not resolve and falls through to the 30-second request timeout. Use `react` mode for PNG blob export, or `exportSvg()` (which works in both modes).
+> `exportBlob()` works in both `react` and `iframe` modes. In iframe mode the view posts a `pict-excalidraw:requestBlob` message and the host returns the PNG blob via `pict-excalidraw:blobReply`, which the parent's message handler resolves.
 
 ## Theme Bridge
 

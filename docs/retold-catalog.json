@@ -1,5 +1,5 @@
 {
-	"Generated": "2026-05-31T01:23:03.784Z",
+	"Generated": "2026-05-31T03:21:51.188Z",
 	"Mode": "module",
 	"GitHubOrg": "fable-retold",
 	"DefaultBranch": "master",
@@ -68,13 +68,18 @@
 			}
 		],
 		"DocFiles": [
+			".nojekyll",
 			"README.md",
 			"_cover.md",
 			"_sidebar.md",
+			"_version.json",
 			"api-reference.md",
 			"architecture.md",
 			"configuration.md",
+			"index.html",
 			"quickstart.md",
+			"retold-catalog.json",
+			"retold-keyword-index.json",
 			"@excalidraw/excalidraw/api/api-intro.mdx",
 			"@excalidraw/excalidraw/api/children-components/children-components-intro.mdx",
 			"@excalidraw/excalidraw/api/children-components/footer.mdx",

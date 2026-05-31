@@ -150,7 +150,7 @@ view.exportSvg({ exportEmbedScene: true }).then((pSvg) =>
 Export the current scene as a PNG `Blob`.
 
 - **React mode:** resolves with a PNG `Blob`. The same `appState` export keys are auto-promoted as for `exportSvg`. Rejects if not mounted or the helper is unavailable.
-- **Iframe mode:** **not currently functional.** The view posts a request but the parent does not handle the reply, so the promise never resolves and rejects via the 30-second request timeout. Use react mode for PNG export, or `exportSvg()` (which works in both modes).
+- **Iframe mode:** posts a request to the host, which returns the PNG blob via the `blobReply` message. Works in both modes.
 
 | Param | Type | Description |
 |---|---|---|
@@ -257,7 +257,7 @@ Tear down the view. Idempotent -- safe to call twice. After `destroy()`, public 
 | `setScene()` | yes | yes | yes |
 | `serialize()` | yes | yes (from snapshot) | yes |
 | `exportSvg()` | yes (SVGElement) | yes (string) | yes |
-| `exportBlob()` | yes | not functional | yes |
+| `exportBlob()` | yes | yes | yes |
 | `setTheme()` | yes | yes | yes |
 | `setReadOnly()` | yes | yes | yes |
 | `load()` | yes | yes | yes |
