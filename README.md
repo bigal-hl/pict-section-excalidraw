@@ -1,5 +1,7 @@
 # pict-section-excalidraw
 
+> **[Read the pict-section-excalidraw Documentation](https://fable-retold.github.io/pict-section-excalidraw/)**
+
 A Pict view that wraps [Excalidraw](https://excalidraw.com) as an embeddable, themable drawing control. Drop it into a `<div>` like any other pict-section.
 
 ## Why this exists
