@@ -4,36 +4,8 @@ Pict Section Excalidraw is a thin adapter between the [Pict](https://fable-retol
 
 ## Module Map
 
-```mermaid
-graph TB
-	subgraph "Host Pict Application"
-		PICT["Pict Instance<br/>(_Pict)"]
-		CA["ContentAssignment<br/>service"]
-		APPDATA["pict.AppData<br/>(scene binding)"]
-	end
-	subgraph "pict-section-excalidraw"
-		DISPATCH["PictSectionExcalidraw<br/>(source/Pict-Section-Excalidraw.js)<br/>dispatcher"]
-		REACT["PictView-Excalidraw-React<br/>(source/views/)"]
-		IFRAME["PictView-Excalidraw-Iframe<br/>(source/views/)"]
-		CONFIG["Default Configuration<br/>(+ theme-bridge CSS)"]
-	end
-	subgraph "Browser Globals (from vendor bundles)"
-		REACTLIB["window.React + window.ReactDOM<br/>(react-vendor.min.js)"]
-		VENDOR["window.PictSectionExcalidrawVendor<br/>{ Excalidraw, exportToSvg,<br/>exportToBlob, serializeAsJSON, ... }<br/>(excalidraw-wrapper.min.js)"]
-	end
-
-	PICT -->|"addView"| DISPATCH
-	DISPATCH -->|"EmbedMode: react"| REACT
-	DISPATCH -->|"EmbedMode: iframe"| IFRAME
-	DISPATCH -->|"merges"| CONFIG
-	REACT -->|"uses"| CA
-	IFRAME -->|"uses"| CA
-	REACT -->|"binds"| APPDATA
-	IFRAME -->|"binds"| APPDATA
-	REACT -->|"createRoot + render"| VENDOR
-	REACT -->|"reads"| REACTLIB
-	IFRAME -->|"iframe + postMessage"| VENDOR
-```
+<!-- bespoke diagram: edit diagrams/module-map.mmd or .hints.json, then: npx pict-renderer-graph build modules/pict/pict-section-excalidraw/docs -->
+![Module Map](diagrams/module-map.svg)
 
 ## The Dispatcher
 
@@ -107,36 +79,8 @@ Both modes load the **same** wrapper bundle (`excalidraw-wrapper.min.js`) and pr
 
 `PictView-Excalidraw-React` resolves the vendor globals (or accepts them explicitly via `connectExcalidrawGlobal`), builds a wrap/mount/status DOM tree inside the target element, then calls `ReactDOM.createRoot(mountElement)` and renders `<Excalidraw {...props}>`.
 
-```mermaid
-sequenceDiagram
-	participant App as Host Pict App
-	participant View as PictView-Excalidraw-React
-	participant CA as ContentAssignment
-	participant Vendor as window.PictSectionExcalidrawVendor
-	participant Excalidraw as React Excalidraw
-
-	App->>View: render()
-	View->>View: onAfterRender() -> onAfterInitialRender()
-	View->>CA: getElement(TargetElementAddress)
-	View->>View: _buildContainerDOM() (wrap + mount + status)
-	View->>View: _resolveVendor()
-	alt vendor present
-		View->>Vendor: React.createElement(Excalidraw, props)
-		View->>Excalidraw: ReactDOM.createRoot(mount).render(...)
-		Excalidraw-->>View: onExcalidrawAPI(api)
-		opt deferred OnLoad pending
-			View->>View: load()
-		end
-		Excalidraw-->>View: onChange(elements, appState, files)
-		View->>View: _handleChange() -> throttle -> OnChange + AppData write
-	else vendor missing
-		alt LazyLoadWrapperURL set
-			View->>View: _lazyLoadVendor() then mount
-		else
-			View->>View: _renderStatus(error)
-		end
-	end
-```
+<!-- bespoke diagram: edit diagrams/react-mount-mode.mmd or .hints.json, then: npx pict-renderer-graph build modules/pict/pict-section-excalidraw/docs -->
+![React-Mount Mode](diagrams/react-mount-mode.svg)
 
 Notable details verified in the source:
 
@@ -149,25 +93,8 @@ Notable details verified in the source:
 
 `PictView-Excalidraw-Iframe` builds an `<iframe>` whose `src` is the configured `IframeHostURL` (default `./excalidraw-iframe-host.html`). The host page loads the same wrapper bundle and mounts Excalidraw inside its own document. The parent view and the iframe communicate over a small `window.postMessage` protocol.
 
-```mermaid
-sequenceDiagram
-	participant View as PictView-Excalidraw-Iframe (parent)
-	participant Iframe as excalidraw-iframe-host (child)
-
-	View->>Iframe: set iframe.src = IframeHostURL
-	Iframe-->>View: pict-excalidraw:ready
-	View->>Iframe: pict-excalidraw:init { initialData, theme, langCode, ... }
-	View->>Iframe: pict-excalidraw:setThemeTokens { --theme-color-*: value }
-	opt OnLoad configured
-		View->>View: load() -> setScene(...)
-	end
-	Iframe-->>View: pict-excalidraw:change { elements, appState, files }
-	View->>View: _handleChange() -> throttle -> OnChange + AppData write
-	View->>Iframe: pict-excalidraw:requestScene { requestId }
-	Iframe-->>View: pict-excalidraw:sceneReply { requestId, payload }
-	View->>Iframe: pict-excalidraw:requestSvg { requestId, exportOptions }
-	Iframe-->>View: pict-excalidraw:svgReply { requestId, payload (SVG string) }
-```
+<!-- bespoke diagram: edit diagrams/iframe-mode.mmd or .hints.json, then: npx pict-renderer-graph build modules/pict/pict-section-excalidraw/docs -->
+![Iframe Mode](diagrams/iframe-mode.svg)
 
 #### postMessage Protocol
 

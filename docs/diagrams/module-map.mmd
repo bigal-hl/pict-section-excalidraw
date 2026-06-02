@@ -1,0 +1,28 @@
+graph TB
+	subgraph "Host Pict Application"
+		PICT["Pict Instance<br/>(_Pict)"]
+		CA["ContentAssignment<br/>service"]
+		APPDATA["pict.AppData<br/>(scene binding)"]
+	end
+	subgraph "pict-section-excalidraw"
+		DISPATCH["PictSectionExcalidraw<br/>(source/Pict-Section-Excalidraw.js)<br/>dispatcher"]
+		REACT["PictView-Excalidraw-React<br/>(source/views/)"]
+		IFRAME["PictView-Excalidraw-Iframe<br/>(source/views/)"]
+		CONFIG["Default Configuration<br/>(+ theme-bridge CSS)"]
+	end
+	subgraph "Browser Globals (from vendor bundles)"
+		REACTLIB["window.React + window.ReactDOM<br/>(react-vendor.min.js)"]
+		VENDOR["window.PictSectionExcalidrawVendor<br/>{ Excalidraw, exportToSvg,<br/>exportToBlob, serializeAsJSON, ... }<br/>(excalidraw-wrapper.min.js)"]
+	end
+
+	PICT -->|"addView"| DISPATCH
+	DISPATCH -->|"EmbedMode: react"| REACT
+	DISPATCH -->|"EmbedMode: iframe"| IFRAME
+	DISPATCH -->|"merges"| CONFIG
+	REACT -->|"uses"| CA
+	IFRAME -->|"uses"| CA
+	REACT -->|"binds"| APPDATA
+	IFRAME -->|"binds"| APPDATA
+	REACT -->|"createRoot + render"| VENDOR
+	REACT -->|"reads"| REACTLIB
+	IFRAME -->|"iframe + postMessage"| VENDOR

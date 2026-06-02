@@ -1,0 +1,28 @@
+sequenceDiagram
+	participant App as Host Pict App
+	participant View as PictView-Excalidraw-React
+	participant CA as ContentAssignment
+	participant Vendor as window.PictSectionExcalidrawVendor
+	participant Excalidraw as React Excalidraw
+
+	App->>View: render()
+	View->>View: onAfterRender() -> onAfterInitialRender()
+	View->>CA: getElement(TargetElementAddress)
+	View->>View: _buildContainerDOM() (wrap + mount + status)
+	View->>View: _resolveVendor()
+	alt vendor present
+		View->>Vendor: React.createElement(Excalidraw, props)
+		View->>Excalidraw: ReactDOM.createRoot(mount).render(...)
+		Excalidraw-->>View: onExcalidrawAPI(api)
+		opt deferred OnLoad pending
+			View->>View: load()
+		end
+		Excalidraw-->>View: onChange(elements, appState, files)
+		View->>View: _handleChange() -> throttle -> OnChange + AppData write
+	else vendor missing
+		alt LazyLoadWrapperURL set
+			View->>View: _lazyLoadVendor() then mount
+		else
+			View->>View: _renderStatus(error)
+		end
+	end

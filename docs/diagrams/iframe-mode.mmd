@@ -1,0 +1,17 @@
+sequenceDiagram
+	participant View as PictView-Excalidraw-Iframe (parent)
+	participant Iframe as excalidraw-iframe-host (child)
+
+	View->>Iframe: set iframe.src = IframeHostURL
+	Iframe-->>View: pict-excalidraw:ready
+	View->>Iframe: pict-excalidraw:init { initialData, theme, langCode, ... }
+	View->>Iframe: pict-excalidraw:setThemeTokens { --theme-color-*: value }
+	opt OnLoad configured
+		View->>View: load() -> setScene(...)
+	end
+	Iframe-->>View: pict-excalidraw:change { elements, appState, files }
+	View->>View: _handleChange() -> throttle -> OnChange + AppData write
+	View->>Iframe: pict-excalidraw:requestScene { requestId }
+	Iframe-->>View: pict-excalidraw:sceneReply { requestId, payload }
+	View->>Iframe: pict-excalidraw:requestSvg { requestId, exportOptions }
+	Iframe-->>View: pict-excalidraw:svgReply { requestId, payload (SVG string) }
