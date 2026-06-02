@@ -2,6 +2,20 @@
 	"name": "full_browser_excalidraw_example",
 	"version": "1.0.0",
 	"description": "Full-viewport Excalidraw demo built with pict-section-excalidraw",
+	"retold": {
+		"ExampleApplication": {
+			"Stage": true,
+			"Title": "Full-Browser Excalidraw",
+			"Summary": "A full-viewport Excalidraw workspace built from pict-section-excalidraw — the maximal embed where the drawing surface owns the whole window.",
+			"Complexity": "Beginner",
+			"SharedVendor": {
+				"Key": "excalidraw",
+				"Scripts": [ "react-vendor.min.js", "excalidraw-wrapper.min.js" ],
+				"Styles": [ "excalidraw-wrapper.css" ],
+				"AssetDirs": [ "excalidraw-assets" ]
+			}
+		}
+	},
 	"main": "FullBrowserExcalidraw-Example-Application.js",
 	"scripts": {
 		"start": "node FullBrowserExcalidraw-Example-Application.js",

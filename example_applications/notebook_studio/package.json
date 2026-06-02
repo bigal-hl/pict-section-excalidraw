@@ -2,6 +2,20 @@
 	"name": "notebook_studio_example",
 	"version": "1.0.0",
 	"description": "Studio for hand-crafting notebook-style Excalidraw diagrams via DSL, AI prompt, or JSON paste",
+	"retold": {
+		"ExampleApplication": {
+			"Stage": true,
+			"Title": "Notebook Studio",
+			"Summary": "A studio for hand-crafting notebook-style diagrams via a small DSL, an AI prompt, or pasted JSON — rendered live through the bespoke notebook generator. The richest example.",
+			"Complexity": "Advanced",
+			"SharedVendor": {
+				"Key": "excalidraw",
+				"Scripts": [ "react-vendor.min.js", "excalidraw-wrapper.min.js" ],
+				"Styles": [ "excalidraw-wrapper.css" ],
+				"AssetDirs": [ "excalidraw-assets" ]
+			}
+		}
+	},
 	"main": "Notebook-Studio-Application.js",
 	"scripts": {
 		"start": "node Notebook-Studio-Application.js",

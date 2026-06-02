@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Excalidraw — Full Browser (pict-section-excalidraw)</title>
+		<!-- PICT Dynamic View CSS Container -->
+		<style id="PICT-CSS"></style>
+		<link rel="stylesheet" href="../_shared/excalidraw/excalidraw-wrapper.css" />
+		<style>
+			*, *::before, *::after { box-sizing: border-box; }
+			html, body { margin: 0; padding: 0; height: 100%; width: 100%; }
+			body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #FFFFFF; color: #1A1A1A; display: flex; flex-direction: column; }
+			.pict-example-header { display: flex; align-items: stretch; background: #2E7D74; color: #FFFFFF; border-bottom: 3px solid #4DB8AC; flex: 0 0 auto; }
+			.pict-example-badge { background: #4DB8AC; padding: 0.6rem 1rem; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; }
+			.pict-example-app-name { padding: 0.6rem 1rem; font-size: 1.1rem; font-weight: 600; }
+			.pict-example-module { margin-left: auto; padding: 0.6rem 1rem; font-size: 0.75rem; opacity: 0.85; }
+			.pict-example-toolbar { display: flex; padding: 0.5rem 1rem; background: #F4F4F4; border-bottom: 1px solid #D0D0D0; gap: 6px; flex: 0 0 auto; }
+			.pict-example-toolbar button { padding: 0.35rem 0.9rem; border-radius: 4px; border: 1px solid #2E7D74; background: #FFFFFF; color: #2E7D74; cursor: pointer; font-weight: 600; font-size: 0.8rem; }
+			.pict-example-toolbar button:hover { background: #E5F4F2; }
+			#ExcalidrawContainer { flex: 1 1 auto; min-height: 0; }
+			#ExcalidrawContainer .pict-excalidraw-wrap { height: 100%; border-radius: 0; border-left: 0; border-right: 0; border-bottom: 0; }
+		</style>
+		<script src="https://cdn.jsdelivr.net/npm/pict@1/dist/pict.min.js" type="text/javascript"></script>
+		<!-- React + ReactDOM as window globals.  Apps that already load React
+		     elsewhere can omit this <script> tag entirely. -->
+		<script src="../_shared/excalidraw/react-vendor.min.js" type="text/javascript"></script>
+		<!-- Excalidraw wrapper — must come after react-vendor. -->
+		<script src="../_shared/excalidraw/excalidraw-wrapper.min.js" type="text/javascript"></script>
+		<script src="./full_browser_excalidraw_example.min.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			function exportSvg()
+			{
+				if (typeof _Pict === 'undefined') return;
+				let view = _Pict.views.FullBrowserExcalidrawView;
+				if (!view) return;
+				view.exportSvg({}).then((svg) =>
+				{
+					let blob = new Blob([new XMLSerializer().serializeToString(svg)], { type: 'image/svg+xml' });
+					let url = URL.createObjectURL(blob);
+					let a = document.createElement('a');
+					a.href = url; a.download = 'excalidraw.svg'; a.click();
+					setTimeout(() => URL.revokeObjectURL(url), 1000);
+				});
+			}
+			function toggleTheme()
+			{
+				if (typeof _Pict === 'undefined') return;
+				let view = _Pict.views.FullBrowserExcalidrawView;
+				if (!view) return;
+				view._currentTheme = (view._currentTheme === 'dark') ? 'light' : 'dark';
+				view.setTheme(view._currentTheme);
+			}
+			function saveScene()
+			{
+				if (typeof _Pict === 'undefined') return;
+				let view = _Pict.views.FullBrowserExcalidrawView;
+				if (!view) return;
+				view.save();
+				console.log('Saved to AppData.Drawing:', _Pict.AppData.Drawing);
+				alert('Scene saved to AppData.Drawing — check the console.');
+			}
+			Pict.safeOnDocumentReady(() => Pict.safeLoadPictApplication(FullBrowserExcalidrawExample, 1));
+		</script>
+	</head>
+	<body>
+		<div class="pict-example-header">
+			<div class="pict-example-badge">Pict Example</div>
+			<div class="pict-example-app-name">Excalidraw — Full Browser</div>
+			<div class="pict-example-module">pict-section-excalidraw</div>
+		</div>
+		<div class="pict-example-toolbar">
+			<button type="button" onclick="exportSvg()">Export SVG</button>
+			<button type="button" onclick="toggleTheme()">Toggle Theme</button>
+			<button type="button" onclick="saveScene()">Save to AppData</button>
+		</div>
+		<div id="ExcalidrawContainer"></div>
+	</body>
+</html>

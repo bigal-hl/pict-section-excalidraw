@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Excalidraw — Embedded (pict-section-excalidraw)</title>
+		<style id="PICT-CSS"></style>
+		<link rel="stylesheet" href="../_shared/excalidraw/excalidraw-wrapper.css" />
+		<style>
+			*, *::before, *::after { box-sizing: border-box; }
+			body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #FAF7F2; color: #2A2520; }
+
+			.app-header { display: flex; align-items: stretch; background: #3D3229; color: #FFFFFF; }
+			.app-header .badge { background: #C9602F; padding: 0.6rem 1rem; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; }
+			.app-header .title { padding: 0.6rem 1rem; font-size: 1.1rem; font-weight: 600; }
+			.app-header .module { margin-left: auto; padding: 0.6rem 1rem; font-size: 0.75rem; opacity: 0.7; }
+
+			.app-body { display: grid; grid-template-columns: 1fr 320px; gap: 16px; padding: 16px; align-items: start; }
+
+			.diagram-card { background: #FFFFFF; border: 1px solid #D4C4A8; border-top: 4px solid #C9602F; border-radius: 6px; padding: 12px; box-shadow: 0 2px 8px rgba(38,70,83,0.08); }
+			.diagram-card h2 { margin: 0 0 8px 0; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; color: #5A4A3C; }
+			#ExcalidrawSmallBox { height: 440px; }
+			#ExcalidrawSmallBox .pict-excalidraw-wrap { height: 100%; }
+
+			.sidebar { display: flex; flex-direction: column; gap: 12px; }
+			.sidebar-card { background: #FFFFFF; border: 1px solid #D4C4A8; border-radius: 6px; padding: 12px; }
+			.sidebar-card h3 { margin: 0 0 6px 0; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: #5A4A3C; }
+			.sidebar-card p { margin: 0 0 8px 0; font-size: 0.85rem; line-height: 1.4; }
+			.sidebar-card .row { display: flex; gap: 6px; flex-wrap: wrap; }
+			.sidebar-card button { padding: 0.4rem 0.9rem; border-radius: 4px; border: 1px solid #3D3229; background: #3D3229; color: #FFFFFF; cursor: pointer; font-weight: 600; font-size: 0.8rem; }
+			.sidebar-card button:hover { background: #2A221A; }
+			.sidebar-card button.secondary { background: #FFFFFF; color: #3D3229; }
+			.sidebar-card button.secondary:hover { background: #F4EEE2; }
+
+			#SceneStatus { font-size: 0.75rem; color: #5A4A3C; font-style: italic; }
+
+			.footer-note { text-align: center; color: #8A7A6C; padding: 12px; font-size: 0.75rem; }
+		</style>
+		<script src="https://cdn.jsdelivr.net/npm/pict@1/dist/pict.min.js" type="text/javascript"></script>
+		<!-- React + ReactDOM as window globals.  Skip this <script> if React
+		     is already loaded elsewhere in the page. -->
+		<script src="../_shared/excalidraw/react-vendor.min.js" type="text/javascript"></script>
+		<!-- Excalidraw wrapper — must come after react-vendor. -->
+		<script src="../_shared/excalidraw/excalidraw-wrapper.min.js" type="text/javascript"></script>
+		<script src="./embedded_excalidraw_example.min.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			function saveNow() { _Pict.views.EmbeddedExcalidrawView.save(); document.getElementById('SceneStatus').textContent = 'Saved to localStorage.'; }
+			function loadNow() { _Pict.views.EmbeddedExcalidrawView.load(); document.getElementById('SceneStatus').textContent = 'Loaded from localStorage.'; }
+			function exportSvg()
+			{
+				_Pict.views.EmbeddedExcalidrawView.exportSvg({}).then((svg) =>
+				{
+					let blob = new Blob([new XMLSerializer().serializeToString(svg)], { type: 'image/svg+xml' });
+					let url = URL.createObjectURL(blob);
+					let a = document.createElement('a'); a.href = url; a.download = 'diagram.svg'; a.click();
+					setTimeout(() => URL.revokeObjectURL(url), 1000);
+				});
+			}
+			function clearStorage() { window.localStorage.removeItem('pict-section-excalidraw-demo-scene'); document.getElementById('SceneStatus').textContent = 'localStorage cleared.'; }
+			Pict.safeOnDocumentReady(() => Pict.safeLoadPictApplication(EmbeddedExcalidrawExample, 1));
+		</script>
+	</head>
+	<body>
+		<div class="app-header">
+			<div class="badge">Pict Example</div>
+			<div class="title">Excalidraw — Embedded</div>
+			<div class="module">pict-section-excalidraw</div>
+		</div>
+		<div class="app-body">
+			<div class="diagram-card">
+				<h2>Architecture Sketch</h2>
+				<div id="ExcalidrawSmallBox"></div>
+			</div>
+			<div class="sidebar">
+				<div class="sidebar-card">
+					<h3>OnLoad / OnSave</h3>
+					<p>This demo wires <code>OnLoad</code> and <code>OnSave</code> to <code>localStorage</code> instead of pict's <code>AppData</code> binding. Real apps drop in their own callbacks the same way.</p>
+					<div class="row">
+						<button onclick="saveNow()">Save</button>
+						<button onclick="loadNow()" class="secondary">Reload</button>
+						<button onclick="clearStorage()" class="secondary">Clear</button>
+					</div>
+				</div>
+				<div class="sidebar-card">
+					<h3>Export</h3>
+					<p>Pull the current scene out as SVG via the public API.</p>
+					<div class="row">
+						<button onclick="exportSvg()">Download SVG</button>
+					</div>
+				</div>
+				<div class="sidebar-card">
+					<h3>Status</h3>
+					<p id="SceneStatus">Idle.</p>
+				</div>
+			</div>
+		</div>
+		<div class="footer-note">Sized at 440 px tall — the Excalidraw chrome reflows to fit, and the scene + sidebar share the page.</div>
+	</body>
+</html>

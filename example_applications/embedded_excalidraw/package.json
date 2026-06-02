@@ -2,6 +2,20 @@
 	"name": "embedded_excalidraw_example",
 	"version": "1.0.0",
 	"description": "Demo: Excalidraw embedded in a small div with sibling chrome, demonstrating OnLoad/OnSave overrides",
+	"retold": {
+		"ExampleApplication": {
+			"Stage": true,
+			"Title": "Embedded Excalidraw",
+			"Summary": "Excalidraw embedded in a small card alongside other page chrome, with OnLoad/OnSave wired to localStorage and SVG export via the public API — the drop-in embed pattern.",
+			"Complexity": "Beginner",
+			"SharedVendor": {
+				"Key": "excalidraw",
+				"Scripts": [ "react-vendor.min.js", "excalidraw-wrapper.min.js" ],
+				"Styles": [ "excalidraw-wrapper.css" ],
+				"AssetDirs": [ "excalidraw-assets" ]
+			}
+		}
+	},
 	"main": "EmbeddedExcalidraw-Example-Application.js",
 	"scripts": {
 		"start": "node EmbeddedExcalidraw-Example-Application.js",

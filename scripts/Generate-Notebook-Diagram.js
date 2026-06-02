@@ -300,12 +300,20 @@ function sizeFor(pNode, pProfile)
 	let tmpBase     = tmpDefaults[tmpKind] || tmpDefaults.rectangle || { width: 180, height: 80 };
 	let tmpW        = pNode.width  || tmpBase.width;
 	let tmpH        = pNode.height || tmpBase.height;
-	// Expand width if the label is long enough that it wouldn't fit at the
-	// given font size.  Cheap heuristic: ~8 px per char at fontSize 20.
-	let tmpLabelLen = (pNode.label || '').length;
 	let tmpFontSize = pProfile.FontSize || 20;
-	let tmpEstWidth = tmpLabelLen * tmpFontSize * 0.55 + 32;  // 0.55 ≈ avg glyph width / fontSize
+	// Size to the label: width from the WIDEST line (not the whole string --
+	// a multi-line label would otherwise estimate absurdly wide), height from
+	// the line count.  Cheap heuristic: ~0.55 * fontSize per glyph.
+	let tmpLines    = String(pNode.label || '').split('\n');
+	let tmpMaxLine  = 0;
+	for (let i = 0; i < tmpLines.length; i++)
+	{
+		if (tmpLines[i].length > tmpMaxLine) tmpMaxLine = tmpLines[i].length;
+	}
+	let tmpEstWidth = tmpMaxLine * tmpFontSize * 0.55 + 32;  // 0.55 ≈ avg glyph width / fontSize
 	if (tmpEstWidth > tmpW) tmpW = Math.ceil(tmpEstWidth);
+	let tmpEstHeight = tmpLines.length * tmpFontSize * 1.25 + 28;
+	if (tmpEstHeight > tmpH) tmpH = Math.ceil(tmpEstHeight);
 	return { width: tmpW, height: tmpH };
 }
 

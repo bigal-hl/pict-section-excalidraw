@@ -9,6 +9,12 @@
   - [Configuration](configuration.md)
   - [API Reference](api-reference.md)
 
+- Examples
+
+  - [Embedded Excalidraw](#/page/examples/embedded_excalidraw/README)
+  - [Full-Browser Excalidraw](#/page/examples/full_browser_excalidraw/README)
+  - [Notebook Studio](#/page/examples/notebook_studio/README)
+
 - Retold Ecosystem
 
   - [Pict](https://fable-retold.github.io/pict/)

@@ -16,3 +16,11 @@ Wraps [Excalidraw](https://excalidraw.com) as a first-class Pict view. Drop it i
 [Quick Start](quickstart.md)
 [Architecture](architecture.md)
 [GitHub](https://github.com/fable-retold/pict-section-excalidraw)
+
+<!-- docuserve:examples:start -->
+| Example | Complexity | Launch |
+|---------|------------|--------|
+| [Embedded Excalidraw](examples/embedded%5Fexcalidraw/README.md) | Beginner | [Launch](examples/embedded%5Fexcalidraw/index.html) |
+| [Full-Browser Excalidraw](examples/full%5Fbrowser%5Fexcalidraw/README.md) | Beginner | [Launch](examples/full%5Fbrowser%5Fexcalidraw/index.html) |
+| [Notebook Studio](examples/notebook%5Fstudio/README.md) | Advanced | [Launch](examples/notebook%5Fstudio/index.html) |
+<!-- docuserve:examples:end -->
