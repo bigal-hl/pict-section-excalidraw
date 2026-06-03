@@ -83,17 +83,8 @@ In `iframe` mode, theme tokens are piped through `postMessage` and re-applied as
 
 ## Vendor mirror
 
-```
-vendor/
-├── excalidraw/                  Frozen-in-time mirror of github.com/excalidraw/excalidraw
-└── excalidraw-built/            Pre-built artifacts shipped to consumers (committed)
-    ├── react-vendor.min.js        React + ReactDOM as window globals (omit if the host already loads React)
-    ├── excalidraw-wrapper.min.js  @excalidraw/excalidraw + helpers, exposed as window.PictSectionExcalidrawVendor (reads React off the window)
-    ├── excalidraw-wrapper.css     The @excalidraw/excalidraw stylesheet
-    ├── excalidraw-iframe-host.html
-    ├── excalidraw-iframe-host.js
-    └── assets/                  Fonts + locales (EXCALIDRAW_ASSET_PATH)
-```
+<!-- bespoke diagram: edit diagrams/vendor-mirror.mmd or .hints.json, then: npx pict-renderer-graph build modules/pict/pict-section-excalidraw -->
+![Vendor mirror](diagrams/vendor-mirror.svg)
 
 Run `npm run build:vendor` to rebuild from `vendor/excalidraw/`.
 

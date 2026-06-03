@@ -151,16 +151,8 @@ The `Theme` option (`'light'` / `'dark'` / `'auto'`) controls Excalidraw's own l
 
 Excalidraw is React-only and lives upstream on GitHub. To insulate the Retold ecosystem from upstream drift -- and from GitHub itself disappearing -- this module mirrors the entire Excalidraw repository into `vendor/excalidraw/`. The mirror has no `.git/`; it is frozen-in-time source that can be patched in place and rebuilt. Drift is a feature: the version that ships is the version that was vetted.
 
-```
-vendor/
-├── excalidraw/                  Frozen-in-time mirror of github.com/excalidraw/excalidraw
-└── excalidraw-built/            Pre-built artifacts shipped to consumers (committed)
-    ├── react-vendor.min.js        React + ReactDOM as window globals
-    ├── excalidraw-wrapper.min.js  Excalidraw + helpers → window.PictSectionExcalidrawVendor
-    ├── excalidraw-wrapper.css     The Excalidraw stylesheet
-    ├── excalidraw-iframe-host.html / .js
-    └── assets/                    Fonts + locales (EXCALIDRAW_ASSET_PATH)
-```
+<!-- bespoke diagram: edit diagrams/vendoring-strategy.mmd or .hints.json, then: npx pict-renderer-graph build modules/pict/pict-section-excalidraw/docs -->
+![Vendoring Strategy](diagrams/vendoring-strategy.svg)
 
 `scripts/Build-Vendor-Bundles.js` (run via `npm run build:vendor`) produces these with esbuild. React and ReactDOM are externalized into a **separate** `react-vendor.min.js` so an app that already loads React can omit it; the wrapper bundle reads `window.React` / `window.ReactDOM` and exposes Excalidraw plus its `exportToSvg` / `exportToBlob` / `serializeAsJSON` / mermaid helpers as `window.PictSectionExcalidrawVendor`.
 
@@ -170,38 +162,8 @@ The committed source for the iframe host page lives under `source/iframe-host/` 
 
 ## File Structure
 
-```
-pict-section-excalidraw/
-├── README.md
-├── package.json
-├── source/
-│   ├── Pict-Section-Excalidraw.js                    Dispatcher + exports
-│   ├── Pict-Section-Excalidraw-DefaultConfiguration.js  Defaults + theme-bridge CSS
-│   ├── views/
-│   │   ├── PictView-Excalidraw-React.js              React-mount implementation
-│   │   └── PictView-Excalidraw-Iframe.js             iframe implementation
-│   ├── iframe-host/
-│   │   ├── excalidraw-iframe-host.html
-│   │   └── excalidraw-iframe-host.js                 Runs inside the iframe
-│   └── style-profiles/
-│       └── Notebook-Default.js                        Palette/roughness profile for generated diagrams
-├── scripts/
-│   ├── Build-Vendor-Bundles.js                        Builds vendor/excalidraw-built/
-│   └── Generate-Notebook-Diagram.js
-├── vendor/                                            (mirrored Excalidraw - not this module's API)
-├── example_applications/
-│   ├── full_browser_excalidraw/
-│   ├── embedded_excalidraw/
-│   └── notebook_studio/
-└── docs/
-    ├── README.md
-    ├── _cover.md
-    ├── _sidebar.md
-    ├── quickstart.md
-    ├── architecture.md
-    ├── configuration.md
-    └── api-reference.md
-```
+<!-- bespoke diagram: edit diagrams/file-structure.mmd or .hints.json, then: npx pict-renderer-graph build modules/pict/pict-section-excalidraw/docs -->
+![File Structure](diagrams/file-structure.svg)
 
 ## View State
 

@@ -1,0 +1,9 @@
+vendor/
+├── excalidraw/                  Frozen-in-time mirror of github.com/excalidraw/excalidraw
+└── excalidraw-built/            Pre-built artifacts shipped to consumers (committed)
+    ├── react-vendor.min.js        React + ReactDOM as window globals (omit if the host already loads React)
+    ├── excalidraw-wrapper.min.js  @excalidraw/excalidraw + helpers, exposed as window.PictSectionExcalidrawVendor (reads React off the window)
+    ├── excalidraw-wrapper.css     The @excalidraw/excalidraw stylesheet
+    ├── excalidraw-iframe-host.html
+    ├── excalidraw-iframe-host.js
+    └── assets/                  Fonts + locales (EXCALIDRAW_ASSET_PATH)

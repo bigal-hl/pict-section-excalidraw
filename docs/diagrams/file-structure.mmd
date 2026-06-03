@@ -1,0 +1,30 @@
+pict-section-excalidraw/
+├── README.md
+├── package.json
+├── source/
+│   ├── Pict-Section-Excalidraw.js                    Dispatcher + exports
+│   ├── Pict-Section-Excalidraw-DefaultConfiguration.js  Defaults + theme-bridge CSS
+│   ├── views/
+│   │   ├── PictView-Excalidraw-React.js              React-mount implementation
+│   │   └── PictView-Excalidraw-Iframe.js             iframe implementation
+│   ├── iframe-host/
+│   │   ├── excalidraw-iframe-host.html
+│   │   └── excalidraw-iframe-host.js                 Runs inside the iframe
+│   └── style-profiles/
+│       └── Notebook-Default.js                        Palette/roughness profile for generated diagrams
+├── scripts/
+│   ├── Build-Vendor-Bundles.js                        Builds vendor/excalidraw-built/
+│   └── Generate-Notebook-Diagram.js
+├── vendor/                                            (mirrored Excalidraw - not this module's API)
+├── example_applications/
+│   ├── full_browser_excalidraw/
+│   ├── embedded_excalidraw/
+│   └── notebook_studio/
+└── docs/
+    ├── README.md
+    ├── _cover.md
+    ├── _sidebar.md
+    ├── quickstart.md
+    ├── architecture.md
+    ├── configuration.md
+    └── api-reference.md
