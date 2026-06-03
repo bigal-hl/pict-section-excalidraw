@@ -4,34 +4,8 @@ An example app for hand-crafting Excalidraw diagrams from a graph description. T
 
 ## What it does
 
-```
-   ┌─────────────────────────────────────────────────────────────┐
-   │  free-text description                                      │
-   │       │                                                     │
-   │       └─►  buildAIPrompt()  ───►  prompt on clipboard       │
-   │                                       │                     │
-   │                                       ▼                     │
-   │                                  paste into Claude/GPT/etc. │
-   │                                       │                     │
-   │                                       ▼                     │
-   │                                  LLM emits JSON             │
-   │                                       │                     │
-   │  paste into JSON tab  ◄───────────────┘                     │
-   │       │                                                     │
-   │       ▼                                                     │
-   │  validateFixture() ──┐                                      │
-   │       │              │ errors                               │
-   │       ▼              ▼                                      │
-   │  generateNotebook    status bar                             │
-   │  Diagram()                                                  │
-   │       │                                                     │
-   │       ▼                                                     │
-   │  setScene() ─►  pict-section-excalidraw live render         │
-   │                                                             │
-   │  exportSvg({exportEmbedScene:true})  →  download .svg       │
-   │                                                             │
-   └─────────────────────────────────────────────────────────────┘
-```
+<!-- bespoke diagram: edit diagrams/what-it-does.mmd or .hints.json, then: npx pict-renderer-graph build modules/pict/pict-section-excalidraw/example_applications/notebook_studio -->
+![What it does](diagrams/what-it-does.svg)
 
 The DSL tab is a fast-path for users who already know the graph; the AI Prompt tab is the bridge between "I have a vague idea" and "I have valid fixture JSON".
 

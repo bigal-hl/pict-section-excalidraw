@@ -1,0 +1,12 @@
+graph TD
+    Intent["high-level intent"]
+    LLM["LLM"]
+    FixtureJSON["fixture-shape JSON"]
+    Generator["Generate-Notebook-Diagram.js"]
+    ExcalidrawJSON[".excalidraw.json"]
+    LoadExcalidraw["load in pict-section-excalidraw"]
+    EditByHand["edit by hand"]
+    ExcalidrawSVG[".excalidraw.svg<br/>(re-renderable forever)"]
+
+    Intent --> LLM --> FixtureJSON --> Generator --> ExcalidrawJSON
+    ExcalidrawJSON --> LoadExcalidraw --> EditByHand --> ExcalidrawSVG

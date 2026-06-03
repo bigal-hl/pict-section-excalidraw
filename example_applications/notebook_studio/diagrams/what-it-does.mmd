@@ -1,0 +1,20 @@
+graph TD
+    FreeText["free-text description"]
+    BuildPrompt["buildAIPrompt()"]
+    Clipboard["prompt on clipboard"]
+    LLMTool["paste into Claude/GPT/etc."]
+    LLMEmit["LLM emits JSON"]
+    JSONTab["paste into JSON tab"]
+    Validate["validateFixture()"]
+    StatusBar["status bar"]
+    Generate["generateNotebookDiagram()"]
+    SetScene["setScene()"]
+    LiveRender["pict-section-excalidraw live render"]
+    ExportSvg["exportSvg({exportEmbedScene:true})"]
+    Download["download .svg"]
+
+    FreeText --> BuildPrompt --> Clipboard --> LLMTool --> LLMEmit --> JSONTab
+    JSONTab --> Validate
+    Validate -->|errors| StatusBar
+    Validate --> Generate --> SetScene --> LiveRender
+    LiveRender --> ExportSvg --> Download

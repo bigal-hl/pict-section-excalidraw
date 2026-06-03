@@ -46,17 +46,8 @@ Outputs land in `test/output/`:
 
 ## The AI workflow
 
-```
-   high-level intent  ──►  LLM  ──►  fixture-shape JSON  ──►  Generate-Notebook-Diagram.js  ──►  .excalidraw.json
-                                                                                                      │
-                                                                                          load in pict-section-excalidraw
-                                                                                                      │
-                                                                                                  edit by hand
-                                                                                                      │
-                                                                                                      ▼
-                                                                                             .excalidraw.svg
-                                                                                          (re-renderable forever)
-```
+<!-- bespoke diagram: edit diagrams/the-ai-workflow.mmd or .hints.json, then: npx pict-renderer-graph build modules/pict/pict-section-excalidraw/test/fixtures/notebook-diagrams -->
+![The AI workflow](diagrams/the-ai-workflow.svg)
 
 The fixture-shape JSON is **stable and small** — every field is documented above. An LLM prompt of the form:
 
