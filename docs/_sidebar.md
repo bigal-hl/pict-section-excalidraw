@@ -14,8 +14,8 @@
   - [Embedded Excalidraw](#/page/examples/embedded_excalidraw/README)
   - [Full-Browser Excalidraw](#/page/examples/full_browser_excalidraw/README)
   - [Notebook Studio](#/page/examples/notebook_studio/README)
-  - [Diagram Form](#/page/examples/diagram_form/README)
-  - [Superhero Studio](#/page/examples/superhero_studio/README)
+  - [Diagram Form Input ↗](https://fable-retold.github.io/pict-section-form/#/page/examples/diagram_form/README)
+  - [Superhero Studio ↗](https://fable-retold.github.io/pict-section-form/#/page/examples/superhero_studio/README)
 
 - Retold Ecosystem
 

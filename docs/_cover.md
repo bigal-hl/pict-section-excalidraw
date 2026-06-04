@@ -20,9 +20,7 @@ Wraps [Excalidraw](https://excalidraw.com) as a first-class Pict view. Drop it i
 <!-- docuserve:examples:start -->
 | Example | Complexity | Launch |
 |---------|------------|--------|
-| [Diagram Form Input](examples/diagram%5Fform/README.md) | Intermediate | [&#9654; Launch](examples/diagram%5Fform/index.html) |
 | [Embedded Excalidraw](examples/embedded%5Fexcalidraw/README.md) | Beginner | [&#9654; Launch](examples/embedded%5Fexcalidraw/index.html) |
 | [Full-Browser Excalidraw](examples/full%5Fbrowser%5Fexcalidraw/README.md) | Beginner | [&#9654; Launch](examples/full%5Fbrowser%5Fexcalidraw/index.html) |
 | [Notebook Studio](examples/notebook%5Fstudio/README.md) | Advanced | [&#9654; Launch](examples/notebook%5Fstudio/index.html) |
-| [Superhero Studio](examples/superhero%5Fstudio/README.md) | Advanced | [&#9654; Launch](examples/superhero%5Fstudio/index.html) |
 <!-- docuserve:examples:end -->
