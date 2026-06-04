@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Superhero Studio — Pict Example</title>
+
+	<style id="PICT-CSS"></style>
+	<style id="diagram-theme">
+		:root
+		{
+			--diagram-ink:        #1B1F23;
+			--diagram-paper:      #FDFCF7;
+			--diagram-accent:     #E66C2C;
+			--diagram-highlight:  #FFD966;
+			--diagram-deemphasis: #A0A0A0;
+			--diagram-link:       #2E7D74;
+		}
+	</style>
+	<style>
+		*, *::before, *::after { box-sizing: border-box; }
+		body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #F4F1ED; color: #2A2520; }
+
+		.pict-example-header { display: flex; align-items: stretch; background: #264653; border-bottom: 3px solid #E76F51; }
+		.pict-example-badge { background: #E76F51; color: #FAEDCD; padding: 0.6rem 1rem; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; }
+		.pict-example-app-name { padding: 0.6rem 1rem; color: #FAEDCD; font-size: 1.1rem; font-weight: 600; }
+		.pict-example-module { margin-left: auto; padding: 0.6rem 1rem; color: #D4A373; font-size: 0.75rem; letter-spacing: 0.03em; align-self: center; }
+
+		.page-content { padding: 1.6rem 2rem 4rem; max-width: 1080px; margin: 0 auto; }
+
+		.hero-bar
+		{
+			background: #FFFFFF; border: 1px solid #D4C4A8; border-radius: 8px;
+			padding: 16px 20px; margin-bottom: 22px;
+			display: flex; flex-wrap: wrap; gap: 14px; align-items: center;
+			box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+		}
+		.hero-bar label { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; color: #5A4A3C; font-weight: 600; }
+		.hero-bar select
+		{
+			padding: 6px 12px; border: 1px solid #D4C4A8; border-radius: 4px;
+			background: #FBF7EE; font-size: 0.95rem; min-width: 220px;
+		}
+		.hero-bar .theme-group { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+		.hero-bar .swatch
+		{
+			width: 22px; height: 22px; border-radius: 4px; cursor: pointer;
+			border: 2px solid rgba(0,0,0,0.1); transition: transform 0.08s ease;
+		}
+		.hero-bar .swatch:hover { transform: scale(1.1); border-color: #2E7D74; }
+
+		.field-action-bar
+		{
+			display: flex; align-items: center; gap: 10px;
+			margin-top: -8px; margin-bottom: 12px; padding: 0 4px;
+		}
+		.field-action-bar button
+		{
+			padding: 4px 12px; font-size: 0.78rem; font-weight: 600;
+			color: #FAEDCD; background: #264653; border: none; border-radius: 4px;
+			cursor: pointer;
+		}
+		.field-action-bar button:hover { background: #E76F51; }
+		.field-action-bar .hint { font-size: 0.72rem; color: #8A7F72; }
+
+		#PostkardFormContainer
+		{
+			background: #FFFFFF; border: 1px solid #D4C4A8; border-radius: 8px;
+			padding: 24px 26px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+		}
+
+		.notes
+		{
+			margin-top: 24px; padding: 14px 18px;
+			background: #FFF8E7; border-left: 3px solid #E9C46A; border-radius: 4px;
+			font-size: 0.85rem; color: #5A4A3C;
+		}
+		.notes strong { color: #2A2520; }
+		.notes code { font-family: 'SFMono-Regular', Menlo, monospace; background: #F0E8DA; padding: 1px 5px; border-radius: 3px; font-size: 0.9em; }
+	</style>
+</head>
+<body>
+	<header class="pict-example-header">
+		<span class="pict-example-badge">Pict Example</span>
+		<span class="pict-example-app-name">Superhero Studio</span>
+		<span class="pict-example-module">pict-section-excalidraw &times; pict-section-markdowneditor</span>
+	</header>
+
+	<main class="page-content">
+		<div class="hero-bar">
+			<label for="hero-select">Load Superhero</label>
+			<select id="hero-select" onchange="window.SuperheroStudioExample.demo_loadHero(this.value)">
+				<option value="captain-verbose">Captain Verbose</option>
+				<option value="the-notebook">The Notebook</option>
+				<option value="markdown-marauder">Markdown Marauder</option>
+				<option value="the-modal-avenger">The Modal Avenger</option>
+				<option value="vector-vince">Vector Vince</option>
+			</select>
+
+			<div class="theme-group">
+				<span style="font-size:0.78rem; text-transform:uppercase; letter-spacing:0.08em; color:#5A4A3C; font-weight:600;">Portrait theme</span>
+				<span class="swatch" title="Notebook"  style="background:#FDFCF7; border-color:#1B1F23;" onclick="window.applyTheme('notebook')"></span>
+				<span class="swatch" title="Dark"      style="background:#1B1F23;" onclick="window.applyTheme('dark')"></span>
+				<span class="swatch" title="Blueprint" style="background:#5DA9E9;" onclick="window.applyTheme('blueprint')"></span>
+				<span class="swatch" title="Sepia"     style="background:#B08968;" onclick="window.applyTheme('sepia')"></span>
+			</div>
+		</div>
+
+		<div class="field-action-bar">
+			<button id="toggle-Portrait" onclick="window.SuperheroStudioExample.demo_toggleMode('Portrait')">Edit</button>
+			<span class="hint">Toggle the Portrait field into Excalidraw — first click lazy-loads the editor bundle.</span>
+
+			<button id="toggle-OriginStory" onclick="window.SuperheroStudioExample.demo_toggleMode('OriginStory')" style="margin-left:18px;">Edit</button>
+			<span class="hint">Toggle the Origin Story field into the markdown editor.</span>
+		</div>
+
+		<div id="PostkardFormContainer"></div>
+
+		<div class="notes">
+			<strong>What's happening:</strong>
+			Stock inputs (<code>Text</code>, <code>Number</code>, <code>Option</code>, <code>TextArea</code>) sit next to two complex InputTypes —
+			<code>Diagram</code> (Portrait) and <code>RichText</code> (Origin Story) — in the same form, all driven by the same
+			<code>marshalDataFromAppDataToView</code> pipeline. The portrait SVGs use <code>var(--diagram-ink, …)</code> with hex fallbacks,
+			so swapping the theme swatches recolors them live without re-rendering. Loading a new hero from the dropdown folds any open editors back
+			into view mode first, so the swap doesn't strand CodeMirror or Excalidraw on yesterday's character.
+		</div>
+	</main>
+
+	<script src="https://cdn.jsdelivr.net/npm/pict@1/dist/pict.min.js"></script>
+	<script src="./superhero_studio_example.min.js"></script>
+	<script>
+		const _Themes =
+		{
+			notebook:  { ink:'#1B1F23', paper:'#FDFCF7', accent:'#E66C2C', highlight:'#FFD966', deemphasis:'#A0A0A0', link:'#2E7D74' },
+			dark:      { ink:'#EAEAEA', paper:'#1B1F23', accent:'#FFB570', highlight:'#FFD966', deemphasis:'#666666', link:'#7FC4BD' },
+			blueprint: { ink:'#08296B', paper:'#E5F0FB', accent:'#5DA9E9', highlight:'#F4D35E', deemphasis:'#8AA3B6', link:'#1F77B4' },
+			sepia:     { ink:'#3D2B1F', paper:'#F1E3C9', accent:'#B07043', highlight:'#E2C58B', deemphasis:'#A48A6E', link:'#7A5A36' }
+		};
+		window.applyTheme = function(pName)
+		{
+			let tmpStyle = document.getElementById('diagram-theme');
+			let tmpT = _Themes[pName] || _Themes.notebook;
+			tmpStyle.textContent =
+				':root { ' +
+				'--diagram-ink:'        + tmpT.ink        + ';' +
+				'--diagram-paper:'      + tmpT.paper      + ';' +
+				'--diagram-accent:'     + tmpT.accent     + ';' +
+				'--diagram-highlight:'  + tmpT.highlight  + ';' +
+				'--diagram-deemphasis:' + tmpT.deemphasis + ';' +
+				'--diagram-link:'       + tmpT.link       + ';' +
+				' }';
+		};
+
+		Pict.safeOnDocumentReady(() =>
+		{
+			Pict.safeLoadPictApplication(window.SuperheroStudioExample, 1);
+		});
+	</script>
+</body>
+</html>

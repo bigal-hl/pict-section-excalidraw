@@ -14,6 +14,8 @@
   - [Embedded Excalidraw](#/page/examples/embedded_excalidraw/README)
   - [Full-Browser Excalidraw](#/page/examples/full_browser_excalidraw/README)
   - [Notebook Studio](#/page/examples/notebook_studio/README)
+  - [Diagram Form](#/page/examples/diagram_form/README)
+  - [Superhero Studio](#/page/examples/superhero_studio/README)
 
 - Retold Ecosystem
 

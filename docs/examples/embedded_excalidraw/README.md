@@ -1,7 +1,7 @@
 # Embedded Excalidraw
 
 <!-- docuserve:example-launch:start -->
-> **[Launch the live app](examples/embedded%5Fexcalidraw/index.html)** - runs in your browser, opens in a new tab.
+> **[&#9654; Launch the live app](examples/embedded%5Fexcalidraw/index.html)** — runs in your browser, opens in a new tab.
 <!-- docuserve:example-launch:end -->
 
 

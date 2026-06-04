@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Diagram Form Input — Pict Example</title>
+
+	<style id="PICT-CSS"></style>
+	<style id="diagram-theme">
+		/* Theme tokens that the saved SVG resolves to. Default = notebook. */
+		:root
+		{
+			--diagram-ink:        #1B1F23;
+			--diagram-paper:      #FDFCF7;
+			--diagram-accent:     #E66C2C;
+			--diagram-highlight:  #FFD966;
+			--diagram-deemphasis: #A0A0A0;
+			--diagram-link:       #2E7D74;
+		}
+	</style>
+	<style>
+		*, *::before, *::after { box-sizing: border-box; }
+		body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #FAF8F4; color: #2A2520; }
+
+		.pict-example-header { display: flex; align-items: stretch; background: #264653; border-bottom: 3px solid #E76F51; }
+		.pict-example-badge { background: #E76F51; color: #FAEDCD; padding: 0.6rem 1rem; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; }
+		.pict-example-app-name { padding: 0.6rem 1rem; color: #FAEDCD; font-size: 1.1rem; font-weight: 600; }
+		.pict-example-module { margin-left: auto; padding: 0.6rem 1rem; color: #D4A373; font-size: 0.75rem; letter-spacing: 0.03em; align-self: center; }
+
+		.page-content { padding: 2rem; max-width: 920px; margin: 0 auto; }
+		.intro { color: #5A4A3C; font-size: 0.9rem; line-height: 1.6; margin-bottom: 24px; }
+		.intro code { background: #F0E8DA; padding: 1px 6px; border-radius: 3px; font-family: 'SFMono-Regular', Menlo, monospace; font-size: 0.85em; }
+
+		.controls { background: #FFFFFF; border: 1px solid #D4C4A8; border-radius: 6px; padding: 14px 16px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; font-size: 0.85rem; }
+		.controls button { padding: 6px 14px; font-size: 0.85rem; font-weight: 600; color: #FAEDCD; background: #264653; border: none; border-radius: 4px; cursor: pointer; }
+		.controls button:hover { background: #E76F51; }
+		.controls .swatch { display: inline-flex; gap: 6px; align-items: center; padding: 4px 10px; background: #F4EEE2; border-radius: 4px; cursor: pointer; user-select: none; }
+		.controls .swatch::before { content: ''; display: inline-block; width: 12px; height: 12px; border-radius: 2px; border: 1px solid rgba(0,0,0,0.1); background: var(--swatch-color, #fff); }
+
+		#PostkardFormContainer { background: #FFFFFF; border: 1px solid #D4C4A8; border-radius: 6px; padding: 20px; min-height: 280px; }
+
+		.notes { margin-top: 24px; padding: 14px 16px; background: #FFF8E7; border-left: 3px solid #E9C46A; border-radius: 3px; font-size: 0.82rem; color: #5A4A3C; }
+		.notes strong { color: #2A2520; }
+	</style>
+</head>
+<body>
+	<header class="pict-example-header">
+		<span class="pict-example-badge">Pict Example</span>
+		<span class="pict-example-app-name">Diagram Form Input</span>
+		<span class="pict-example-module">pict-section-excalidraw</span>
+	</header>
+
+	<main class="page-content">
+		<p class="intro">
+			A pict-section-form field whose <code>InputType</code> is <code>Diagram</code>. Boots in
+			<strong>view</strong> mode — the saved SVG is written inline, with theme-driven colors.
+			Click <em>Edit</em> to flip into Excalidraw (lazy-loads the editor bundle the first time).
+			Click a theme swatch — the view-mode SVG visibly re-colors without a re-render.
+		</p>
+
+		<div class="controls">
+			<button id="toggle-ArchDiagram" onclick="window.DiagramFormExample.demo_toggleMode('ArchDiagram')">Edit</button>
+
+			<span class="swatch" style="--swatch-color:#1B1F23" onclick="window.applyTheme('notebook')">Notebook</span>
+			<span class="swatch" style="--swatch-color:#EAEAEA" onclick="window.applyTheme('dark')">Dark</span>
+			<span class="swatch" style="--swatch-color:#5DA9E9" onclick="window.applyTheme('blueprint')">Blueprint</span>
+		</div>
+
+		<div id="PostkardFormContainer"></div>
+
+		<div class="notes">
+			<strong>Verifying:</strong>
+			In view mode, change theme — the inline SVG re-colors via CSS only. In edit mode, draw
+			something + click <em>Done</em>; the new SVG is themeified on save, so it picks up the
+			same CSS variables. Inspect the hidden input's value in DevTools to see the
+			<code>var(--diagram-ink, #...)</code> rewriting in action.
+		</div>
+	</main>
+
+	<script src="https://cdn.jsdelivr.net/npm/pict@1/dist/pict.min.js"></script>
+	<script src="./diagram_form_example.min.js"></script>
+	<script>
+		const _Themes =
+		{
+			notebook:  { ink:'#1B1F23', paper:'#FDFCF7', accent:'#E66C2C', highlight:'#FFD966', deemphasis:'#A0A0A0', link:'#2E7D74' },
+			dark:      { ink:'#EAEAEA', paper:'#1B1F23', accent:'#FFB570', highlight:'#FFD966', deemphasis:'#666666', link:'#7FC4BD' },
+			blueprint: { ink:'#08296B', paper:'#E5F0FB', accent:'#5DA9E9', highlight:'#F4D35E', deemphasis:'#8AA3B6', link:'#1F77B4' }
+		};
+		window.applyTheme = function(pName)
+		{
+			let tmpStyle = document.getElementById('diagram-theme');
+			let tmpT = _Themes[pName] || _Themes.notebook;
+			tmpStyle.textContent =
+				':root { ' +
+				'--diagram-ink:'        + tmpT.ink        + ';' +
+				'--diagram-paper:'      + tmpT.paper      + ';' +
+				'--diagram-accent:'     + tmpT.accent     + ';' +
+				'--diagram-highlight:'  + tmpT.highlight  + ';' +
+				'--diagram-deemphasis:' + tmpT.deemphasis + ';' +
+				'--diagram-link:'       + tmpT.link       + ';' +
+				' }';
+		};
+
+		Pict.safeOnDocumentReady(() =>
+		{
+			Pict.safeLoadPictApplication(window.DiagramFormExample, 1);
+		});
+	</script>
+</body>
+</html>
