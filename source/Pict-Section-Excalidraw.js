@@ -103,3 +103,15 @@ module.exports.default_configuration = _DefaultConfiguration;
 module.exports.ReactView             = libExcalidrawReactView;
 module.exports.IframeView            = libExcalidrawIframeView;
 module.exports.selectImplementation  = selectImplementation;
+
+// Form-side integration: the `Diagram` InputType (and its provider class) lives
+// in pict-section-form under `providers/inputs/Pict-Provider-Input-Diagram.js`,
+// not here. The provider lazy-requires this module on the first setMode('edit')
+// so consumers that never edit don't pull the Excalidraw vendor bundle.
+//
+//   const libDiagramInput = require('pict-section-form').DiagramInput;
+//   pict.addProvider('Pict-Input-Diagram',
+//       libDiagramInput.default_configuration, libDiagramInput);
+//
+// The Themeify-SVG utility (used to rewrite Excalidraw hex colors to CSS
+// variables on save) is now exposed as `require('pict-section-form').themeifySVG`.

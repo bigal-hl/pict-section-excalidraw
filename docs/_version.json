@@ -1,7 +1,7 @@
 {
 	"Name": "pict-section-excalidraw",
-	"Version": "1.0.1",
+	"Version": "1.0.2",
 	"Description": "Pict view wrapping Excalidraw as an embeddable, themable, save/load-overridable drawing control",
-	"GeneratedAt": "2026-05-31T03:21:51.664Z",
-	"GitCommit": "3360558"
+	"GeneratedAt": "2026-06-04T23:19:54.293Z",
+	"GitCommit": "e03ac92"
 }

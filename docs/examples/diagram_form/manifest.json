@@ -1,0 +1,13 @@
+{
+  "generated": "2026-05-24T05:56:32.413Z",
+  "source": "vendor/excalidraw (mirror)",
+  "outputs": [
+    "react-vendor.min.js",
+    "excalidraw-wrapper.min.js",
+    "excalidraw-wrapper.css",
+    "excalidraw-iframe-host.html",
+    "excalidraw-iframe-host.js",
+    "assets/"
+  ],
+  "loadOrder": "Load react-vendor.min.js BEFORE excalidraw-wrapper.min.js. Apps already loading React + ReactDOM as window globals can omit react-vendor.min.js entirely."
+}

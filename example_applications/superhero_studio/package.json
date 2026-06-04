@@ -1,0 +1,43 @@
+{
+	"name": "superhero_studio_example",
+	"version": "1.0.0",
+	"description": "Pict-section-form showcase that exercises both new complex InputTypes (RichText for the origin story, Diagram for the portrait) inside a superhero character-sheet form. A dropdown at the top loads five pre-baked superheroes complete with hand-drawn SVG portraits and markdown origin stories.",
+	"main": "SuperheroStudio-Example-Application.js",
+	"scripts": {
+		"start": "node SuperheroStudio-Example-Application.js",
+		"build": "npx quack build && npx quack copy"
+	},
+	"author": "steven velozo <steven@velozo.com>",
+	"license": "MIT",
+	"copyFilesSettings": {
+		"whenFileExists": "overwrite"
+	},
+	"copyFiles": [
+		{ "from": "./html/*",                          "to": "./dist/" },
+		{ "from": "../../node_modules/pict/dist/*",    "to": "./dist/" },
+		{ "from": "../../vendor/excalidraw-built/*",   "to": "./dist/" }
+	],
+	"dependencies": {
+		"pict":                        "^1.0.350",
+		"pict-application":            "^1.0.19",
+		"pict-section-content":        "^1.0.7",
+		"pict-section-excalidraw":     "file:../..",
+		"pict-section-form":           "^1.0.0",
+		"pict-section-markdowneditor": "file:../../../pict-section-markdowneditor",
+		"pict-view":                   "^1.0.66"
+	},
+	"devDependencies": {
+		"@codemirror/lang-markdown": "^6.5.0",
+		"@codemirror/state":         "^6.5.4",
+		"codemirror":                "^6.0.2",
+		"esbuild":                   "^0.27.3"
+	},
+	"retold": {
+		"ExampleApplication": {
+			"Stage": true,
+			"Title": "Superhero Studio",
+			"Summary": "A character-sheet form that combines both new complex InputTypes — RichText for the origin story (markdown editor + rendered view) and Diagram for the portrait (Excalidraw + inline themed SVG) — alongside stock inputs (Text, Number, Option, TextArea). A dropdown at the top loads five hand-drawn superheroes; each one's portrait recolors when you swap themes. Boots in view-mode, edit on demand.",
+			"Complexity": "Advanced"
+		}
+	}
+}
