@@ -1,5 +1,5 @@
 {
-	"Generated": "2026-06-04T23:19:53.741Z",
+	"Generated": "2026-06-04T23:33:33.022Z",
 	"Mode": "module",
 	"GitHubOrg": "fable-retold",
 	"DefaultBranch": "master",
@@ -57,12 +57,12 @@
 						"Path": "#/page/examples/notebook_studio/README"
 					},
 					{
-						"Title": "Diagram Form",
-						"Path": "#/page/examples/diagram_form/README"
+						"Title": "Diagram Form Input ↗",
+						"Path": "https://fable-retold.github.io/pict-section-form/#/page/examples/diagram_form/README"
 					},
 					{
-						"Title": "Superhero Studio",
-						"Path": "#/page/examples/superhero_studio/README"
+						"Title": "Superhero Studio ↗",
+						"Path": "https://fable-retold.github.io/pict-section-form/#/page/examples/superhero_studio/README"
 					}
 				]
 			},
@@ -420,12 +420,6 @@
 			"examples/_shared/excalidraw/excalidraw-wrapper.css",
 			"examples/_shared/excalidraw/excalidraw-wrapper.min.js",
 			"examples/_shared/excalidraw/react-vendor.min.js",
-			"examples/diagram_form/README.md",
-			"examples/diagram_form/diagram_form_example.min.js",
-			"examples/diagram_form/excalidraw-iframe-host.html",
-			"examples/diagram_form/excalidraw-wrapper.css",
-			"examples/diagram_form/index.html",
-			"examples/diagram_form/manifest.json",
 			"examples/embedded_excalidraw/README.md",
 			"examples/embedded_excalidraw/embedded_excalidraw_example.min.js",
 			"examples/embedded_excalidraw/excalidraw-wrapper.css",
@@ -444,12 +438,6 @@
 			"examples/notebook_studio/index.html",
 			"examples/notebook_studio/notebook_studio_example.min.js",
 			"examples/notebook_studio/react-vendor.min.js",
-			"examples/superhero_studio/README.md",
-			"examples/superhero_studio/excalidraw-iframe-host.html",
-			"examples/superhero_studio/excalidraw-wrapper.css",
-			"examples/superhero_studio/index.html",
-			"examples/superhero_studio/manifest.json",
-			"examples/superhero_studio/superhero_studio_example.min.js",
 			"index.html",
 			"quickstart.md",
 			"retold-catalog.json",
